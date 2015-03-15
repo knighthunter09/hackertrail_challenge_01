@@ -9,29 +9,51 @@
             </button>
             <a class="navbar-brand" href="#/view1">Hackertrail Angular</a>
         </div>
-<!--        <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
+        <div id="navbar" class="navbar-collapse collapse">
+            <!--        <ul class="nav navbar-nav navbar-right">
                 <li><a href="#/view1">Dashboard</a></li>
                 <li><a href="#">Settings</a></li>
                 <li><a href="#">Profile</a></li>
                 <li><a href="#">Help</a></li>
-            </ul>
+            </ul>-->
             <form class="navbar-form navbar-right">
-                <input type="text" class="form-control" placeholder="Search...">
+                <input type="text" class="form-control" placeholder="Search..." ng-model="searchText">
             </form>
-        </div>-->
+        </div>
     </div>
 </nav>
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-2 col-md-2 sidebar">
-            <ul class="nav nav-sidebar">
-                <li class="active"><a href="#/view1">Demo <span class="sr-only">(current)</span></a></li>
-<!--                <li><a href="#">Reports</a></li>
+            <!--<ul class="nav nav-sidebar">-->
+                <!--<li class="active">&lt;!&ndash;<a href="#/view1">Demo <span class="sr-only">(current)</span></a>&ndash;&gt;-->
+                <form>
+                    <div class="form-group">
+                    <label for="valSel" control-label>SortBy:</label>
+                    <select ng-model="orderVal" id="valSel" class="form-control">
+                        <option value="name.first">First Name</option>
+                        <option value="name.last">Last Name</option>
+                        <option value="company">Company Name</option>
+                        <option value="email">Email</option>
+                        <option value="eyeColor">Eyecolor</option>
+                        <option value="isActive">IsActive</option>
+                        <option value="mainphone">Primary Phone</option>
+                    </select>
+                    </div>
+          <!--          <div class="form-group">
+                    <label for="valSelUD" control-label>Direction:</label>
+                    <select ng-model="orderValDir" id="valSelUD" class="form-control">
+                        <option value="true">DSC</option>
+                        <option value="false">ASC</option>
+                    </select>
+                    </div>
+          -->      </form>
+                <!--</li>-->
+<!--&lt;!&ndash;                <li><a href="#">Reports</a></li>
                 <li><a href="#">Analytics</a></li>
-                <li><a href="#">Export</a></li>-->
-            </ul>
+                <li><a href="#">Export</a></li>&ndash;&gt;-->
+            <!--</ul>-->
         </div>
         <div class="col-sm-10 col-md-10 main">
             <div class="table-responsive">
@@ -45,9 +67,10 @@
                         <th>EyeColor</th>
                         <th>IsActive</th>
                         <th>Primary Phone</th>
+                        <th></th>
                     </tr>
                     </thead>
-                    <tbody ng-repeat="data in tabularData">
+                    <tbody ng-repeat="data in tabularData | filter:searchText | orderBy: orderVal">
                     <tr popup-display>
                         <td>{{data.name.first | uppercase}}</td>
                         <td>{{data.name.last | uppercase}}</td>
@@ -56,25 +79,62 @@
                         <td>{{data.eyeColor | uppercase}}</td>
                         <td>{{data.isActive | uppercase}}</td>
                         <td>{{data.mainphone}}</td>
-                    </tr>
-                    <!-- Modal -->
-                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-                                </div>
-                                <div class="modal-body">
-                                    ...
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">Save changes</button>
+                        <td>
+                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal_{{$index}}">
+                                Show Details
+                            </button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="myModal_{{$index}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="myModalLabel">{{data.name.first | uppercase}},{{data.name.last | uppercase}}</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <blockquote>{{data.greeting}}</blockquote>
+                                            <span class="label label-default" style="margin-right: 4px;">Contact Number</span>
+                                                <span style="margin-left: 25px;" ng-repeat="cn in data.contactnumber track by $index"><br>
+                                                    <span class="label label-info">{{cn.phoneType | uppercase}}</span> : {{cn.phone}}
+                                                </span><br>
+                                            <span class="label label-default" style="margin-right: 4px;">Friends</span><span ng-repeat="fr in data.friends track by $index">
+                                                {{fr.name | uppercase}}({{fr.id}});
+                                                </span><br>
+                                            <span class="label label-default" style="margin-right: 4px;">Tags</span><span ng-repeat="tg in data.tags track by $index">
+                                                {{tg}};
+                                                </span><br>
+                                            <span class="label label-default" style="margin-right: 4px;">Longitude</span>{{data.longitude}}<br>
+                                            <span class="label label-default" style="margin-right: 4px;">Latitude</span>{{data.latitude}}<br>
+                                            <span class="label label-default" style="margin-right: 4px;">Registered</span>{{data.registered}}<br>
+                                            <span class="label label-default" style="margin-right: 4px;">About</span>{{data.about}}<br>
+                                            <span class="label label-default" style="margin-right: 4px;">Address</span>{{data.address}}<br>
+                                            <span class="label label-default" style="margin-right: 4px;">Age</span>{{data.age}}<br>
+                                            <span class="label label-default" style="margin-right: 4px;">Picture</span><img class="media-right" src="{{data.picture}}"><br>
+                                            <span class="label label-default" style="margin-right: 4px;">Balance</span>{{data.balance}}<br>
+                                            <span class="label label-default" style="margin-right: 4px;">GUID</span>{{data.guid}}<br>
+                                            <span class="label label-default" style="margin-right: 4px;">Index</span>{{data.index}}<br>
+                                            <span class="label label-default" style="margin-right: 4px;">ID</span>{{data._id}}<br>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+
+<!--
+           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="myModal_{{$index}}">Small modal</button>
+
+                            <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-sm">
+                                    <div class="modal-content">
+                                        ...
+                                    </div>
+                                </div>
+                            </div>
+-->
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
             </div>

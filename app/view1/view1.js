@@ -24,10 +24,9 @@ angular.module('myApp.view1', ['ngRoute'])
 }]).directive("popupDisplay",[function(){
         return {
             link: function(scope, element, attribute) {
-                element.on("click",function(){
-                    alert("Hey there, just checking" + scope.data + element.parent().children().eq(0).attr("id"));
-                    element.next().modal('toggle');
-                });
+/*                element.on("click",function(){
+                   alert("Hey there, just checking");
+                });*/
                 element.bind('mouseover', function() {
                     element.css({
                          "cursor": 'pointer'
